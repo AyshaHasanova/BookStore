@@ -24,4 +24,5 @@ public class ReviewController {
     public ResponseEntity<ReviewDto> getReviewById(@PathVariable Long id) {
         return ResponseEntity.ok( reviewService.getReviewById(id));
     }
+
 }

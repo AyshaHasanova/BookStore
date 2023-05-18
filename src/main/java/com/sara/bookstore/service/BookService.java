@@ -1,22 +1,22 @@
 package com.sara.bookstore.service;
 
-import com.sara.bookstore.dao.entity.AuthorEntity;
 import com.sara.bookstore.dao.entity.BookEntity;
 import com.sara.bookstore.dao.repository.AuthorRepository;
 import com.sara.bookstore.dao.repository.BookRepository;
 import com.sara.bookstore.dao.repository.PublicationRepository;
 import com.sara.bookstore.exception.NotEnoughStockException;
 import com.sara.bookstore.exception.NotFoundException;
+import com.sara.bookstore.specification.BookSpecification;
+import com.sara.bookstore.model.dto.BookFilter;
 import com.sara.bookstore.mapper.BookStoreMapper;
 import com.sara.bookstore.model.dto.BookDto;
-import com.sara.bookstore.model.enums.Language;
+
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import com.sara.bookstore.exception.Error;
 
-import java.time.LocalDate;
 import java.util.List;
-
 
 @Service
 @AllArgsConstructor
@@ -24,11 +24,12 @@ public class BookService {
     private final BookRepository bookRepository;
     private final BookStoreMapper bookStoreMapper;
     private final AuthorRepository authorRepository;
+    private final PublicationRepository publisherRepository;
 
 
     public List<BookDto> getBookList() {
         List<BookEntity> bookEntityList = bookRepository.findAll();
-        return bookStoreMapper.toBookDtoList(bookEntityList);
+        return bookStoreMapper.toDto(bookEntityList);
     }
 
     public BookDto getBookById(Long bookId) {
@@ -37,7 +38,7 @@ public class BookService {
                         Error.BOOK_NOT_FOUND_ERROR_CODE,
                         Error.BOOK_NOT_FOUND_ERROR_MESSAGE)
         );
-        return bookStoreMapper.toBookDto(bookEntity);
+        return bookStoreMapper.toDto(bookEntity);
     }
 
     public BookDto reserveBook(Long bookId) {
@@ -51,16 +52,16 @@ public class BookService {
                     Error.NOT_ENOUGH_STOCK_ERROR_MESSAGE);
         }
         bookEntity.setQuantity(bookEntity.getQuantity() - 1);
-        return bookStoreMapper.toBookDto(bookEntity);
+        bookRepository.save(bookEntity);
+        return bookStoreMapper.toDto(bookEntity);
     }
 
-
     public void createBook(BookDto bookDto) {
-        BookEntity bookEntity = bookStoreMapper.toBookEntity(bookDto);
-        List<AuthorEntity> authorEntityList = authorRepository.findAllByIdIn(bookDto.getAuthorIdList());
-        bookEntity.setAuthors(authorEntityList);
-        bookRepository.save(bookEntity);
+        var authorEntityList = authorRepository.findAllByIdIn(bookDto.getAuthorIdList());
+        var publisherEntityList = publisherRepository.findAllByIdIn(bookDto.getPublisherIdList());
 
+        BookEntity bookEntity = bookStoreMapper.toBookEntity(authorEntityList, publisherEntityList, bookDto);
+        bookRepository.save(bookEntity);
     }
 
     public void removeBook(Long bookId) {
@@ -82,24 +83,14 @@ public class BookService {
         bookEntity.setCurrency(bookDto.getCurrency());
         bookEntity.setPublicationDate(bookDto.getPublicationDate());
         BookEntity updatedBookEntity = bookRepository.save(bookEntity);
-        return bookStoreMapper.toBookDto(updatedBookEntity);
+        return bookStoreMapper.toDto(updatedBookEntity);
     }
 
-    public List<BookDto> getBooksByName(String name) {
-        List<BookEntity> bookEntities = bookRepository.findByName(name);
-        return bookStoreMapper.toBookDtoList(bookEntities);
+    public List<BookDto> findBooks(BookFilter filter) {
+        Specification<BookEntity> specification = new BookSpecification(filter);
+        List<BookEntity> bookEntities = bookRepository.findAll(specification);
+        return bookStoreMapper.toDto(bookEntities);
     }
-
-    public List<BookDto> getBooksByLanguage(Language language) {
-        List<BookEntity> bookEntities = bookRepository.findByLanguage(language);
-        return bookStoreMapper.toBookDtoList(bookEntities);
-    }
-
-    public List<BookDto> getBooksByPublicationDate(LocalDate publicationDate) {
-        List<BookEntity> bookEntities = bookRepository.findByPublicationDate(publicationDate);
-        return bookStoreMapper.toBookDtoList(bookEntities);
-    }
-    
 }
 
 

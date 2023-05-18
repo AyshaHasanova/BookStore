@@ -1,16 +1,14 @@
 package com.sara.bookstore.service;
-
-import com.sara.bookstore.dao.entity.AuthorEntity;
 import com.sara.bookstore.dao.entity.PublisherEntity;
 import com.sara.bookstore.dao.repository.PublicationRepository;
 import com.sara.bookstore.exception.Error;
 import com.sara.bookstore.exception.NotFoundException;
 import com.sara.bookstore.mapper.BookStoreMapper;
+import com.sara.bookstore.mapper.PublisherMapper;
 import com.sara.bookstore.model.dto.BookDto;
 import com.sara.bookstore.model.dto.PublisherDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -18,9 +16,11 @@ import java.util.List;
 public class PublicationService {
     private final PublicationRepository publicationRepository;
     private final BookStoreMapper bookStoreMapper;
+    private final PublisherMapper publisherMapper;
+
     public List<PublisherDto> getPublicationList(){
         List<PublisherEntity> publicationEntityList= publicationRepository.findAll();
-        return bookStoreMapper.toPublisherDtoList(publicationEntityList);
+        return publisherMapper.toDto(publicationEntityList);
     }
 
     public PublisherDto getPublicationById(Long Id) {
@@ -28,11 +28,11 @@ public class PublicationService {
                 () -> new NotFoundException(
                         Error.PUBLISHER_NOT_FOUND_ERROR_CODE,
                         Error.PUBLISHER_NOT_FOUND_ERROR_MESSAGE));
-        return bookStoreMapper.toPublisherDto(publisherEntity);
+        return publisherMapper.toDto(publisherEntity);
     }
 
     public void createPublisher( PublisherDto  publisherDto) {
-        PublisherEntity  publisherEntity = bookStoreMapper.toPublisherEntity( publisherDto);
+        PublisherEntity  publisherEntity = publisherMapper.toEntity( publisherDto);
         publicationRepository.save( publisherEntity);
     }
 
@@ -54,11 +54,10 @@ public class PublicationService {
     }
 
     public List<BookDto> getPublisherBooks(Long Id) {
-        PublisherEntity   publisherEntity = publicationRepository.findById(Id).orElseThrow(
+        PublisherEntity  publisherEntity = publicationRepository.findById(Id).orElseThrow(
                 () -> new NotFoundException(Error.PUBLISHER_NOT_FOUND_ERROR_CODE,
                         Error.PUBLISHER_NOT_FOUND_ERROR_MESSAGE));
-        return bookStoreMapper.toBookDtoList(publisherEntity.getBookEntityList());
+        return bookStoreMapper.toDto(publisherEntity.getBookEntityList());
     }
-
 
 }

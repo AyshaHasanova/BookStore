@@ -47,7 +47,7 @@ public class BookEntity {
 
     @Column(name = "review", nullable = false)
     private String review;
-    @OneToMany(mappedBy = "bookEntity", //
+    @OneToMany(mappedBy = "bookEntity",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<ReviewEntity> reviewEntities;

@@ -5,6 +5,7 @@ import com.sara.bookstore.dao.repository.ReviewRepository;
 import com.sara.bookstore.exception.Error;
 import com.sara.bookstore.exception.NotFoundException;
 import com.sara.bookstore.mapper.BookStoreMapper;
+import com.sara.bookstore.mapper.ReviewMapper;
 import com.sara.bookstore.model.dto.ReviewDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,11 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
-    private final BookStoreMapper bookStoreMapper;
+
+    private final ReviewMapper reviewMapper;
 
     public List<ReviewDto> getReviewList(){
         List<ReviewEntity> reviewEntityList= reviewRepository.findAll();
-        return bookStoreMapper.toReviewDtoList(reviewEntityList);
+        return reviewMapper.toDto(reviewEntityList);
     }
 
     public ReviewDto getReviewById(Long Id) {
@@ -26,6 +28,6 @@ public class ReviewService {
                 () -> new NotFoundException(
                         Error.REVIEW_NOT_FOUND_ERROR_CODE,
                         Error.REVIEW_NOT_FOUND_ERROR_MESSAGE));
-        return bookStoreMapper.toReviewDto( reviewEntity);
+        return reviewMapper.toDto( reviewEntity);
     }
 }

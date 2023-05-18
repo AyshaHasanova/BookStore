@@ -38,6 +38,7 @@ public class GeneralExceptionHandler {
         ApiError message = new ApiError(
                 HttpStatus.INTERNAL_SERVER_ERROR.name(),
                 ex.getMessage());
+        ex.printStackTrace();
         return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
     }
 

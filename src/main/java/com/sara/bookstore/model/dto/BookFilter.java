@@ -1,12 +1,13 @@
 package com.sara.bookstore.model.dto;
 
-import com.sara.bookstore.model.enums.Currency;
 import com.sara.bookstore.model.enums.Language;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -14,15 +15,11 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDto {
+public class BookFilter implements Serializable {
     private Long id;
     private String name;
-    private Integer price;
-    private Integer quantity;
+    private List<Language> languages;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDate publicationDate;
-    private Language language;
-    private Currency currency;
-    private String review;
-    private List<Long> authorIdList;
-    private List<Long> publisherIdList;
+
 }
