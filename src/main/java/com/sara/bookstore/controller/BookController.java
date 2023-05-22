@@ -1,7 +1,7 @@
 package com.sara.bookstore.controller;
 
-import com.sara.bookstore.model.dto.BookFilter;
 import com.sara.bookstore.model.dto.BookDto;
+import com.sara.bookstore.model.dto.BookFilter;
 import com.sara.bookstore.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +45,6 @@ public class BookController {
 
     @GetMapping("/books")
     public ResponseEntity<List<BookDto>> getBooks(BookFilter filter) {
-        System.out.println(filter.getPublicationDate());
         return ResponseEntity.ok(bookService.findBooks(filter));
     }
 }

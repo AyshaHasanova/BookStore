@@ -31,8 +31,8 @@ public class PublicationService {
         return publisherMapper.toDto(publisherEntity);
     }
 
-    public void createPublisher( PublisherDto  publisherDto) {
-        PublisherEntity  publisherEntity = publisherMapper.toEntity( publisherDto);
+    public void createPublisher( PublisherDto publisherDto) {
+        PublisherEntity  publisherEntity = publisherMapper.toEntity(publisherDto);
         publicationRepository.save( publisherEntity);
     }
 

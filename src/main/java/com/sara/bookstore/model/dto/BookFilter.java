@@ -19,7 +19,11 @@ public class BookFilter implements Serializable {
     private Long id;
     private String name;
     private List<Language> languages;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDate publicationDate;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate dateFrom;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate dateTo;
+
 
 }

@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="author")
+@Table(name = "author")
 @Data
 @NoArgsConstructor
 @Builder
@@ -19,19 +19,25 @@ public class AuthorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name",nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "surname",nullable = false)
+    @Column(name = "surname", nullable = false)
     private String surname;
 
-    @Column(name = "email",nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "phone",nullable = false, unique = true)
+    @Column(name = "phone", nullable = false, unique = true)
     private String phone;
 
-    @ManyToMany(mappedBy = "authors")
-    private List<BookEntity> bookEntityList;
+    //    @ManyToMany(mappedBy = "authors")
+//    private List<BookEntity> bookEntityList;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @JoinTable(name = "book_author",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
+    private List<BookEntity> books;
 }
 

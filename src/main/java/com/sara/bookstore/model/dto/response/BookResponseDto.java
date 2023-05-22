@@ -1,4 +1,5 @@
-package com.sara.bookstore.model.dto;
+package com.sara.bookstore.model.dto.response;
+
 
 import com.sara.bookstore.model.enums.Currency;
 import com.sara.bookstore.model.enums.Language;
@@ -14,8 +15,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDto {
-
+public class     BookResponseDto {
+    private Long id;
     private String name;
     private Integer price;
     private Integer quantity;
@@ -23,6 +24,8 @@ public class BookDto {
     private Language language;
     private Currency currency;
     private String review;
-    private List<Long> authorIdList;
-    private List<Long> publisherIdList;
+    private List<AuthorResponseDto> authorIdList;
+    private List<AuthorResponseDto> publisherIdList;
+
+
 }

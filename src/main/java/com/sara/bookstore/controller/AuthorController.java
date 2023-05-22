@@ -1,6 +1,7 @@
 package com.sara.bookstore.controller;
 
 import com.sara.bookstore.model.dto.AuthorDto;
+import com.sara.bookstore.model.dto.BookDto;
 import com.sara.bookstore.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

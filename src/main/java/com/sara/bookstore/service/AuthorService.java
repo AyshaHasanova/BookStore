@@ -2,7 +2,9 @@ package com.sara.bookstore.service;
 
 import com.sara.bookstore.dao.entity.AuthorEntity;
 
+import com.sara.bookstore.dao.entity.BookEntity;
 import com.sara.bookstore.dao.repository.AuthorRepository;
+import com.sara.bookstore.dao.repository.BookRepository;
 import com.sara.bookstore.exception.Error;
 import com.sara.bookstore.exception.NotFoundException;
 import com.sara.bookstore.mapper.AuthorMapper;
@@ -19,7 +21,8 @@ import java.util.List;
 public class AuthorService {
     private final AuthorRepository authorRepository;
     private final BookStoreMapper bookStoreMapper;
-    private final AuthorMapper authorMapper ;
+    private final AuthorMapper authorMapper;
+    private final BookRepository bookRepository;
 
     public List<AuthorDto> getAutorList() {
         return authorMapper.toDto(authorRepository.findAll());
@@ -33,10 +36,12 @@ public class AuthorService {
     }
 
     public void createAuthor(AuthorDto authorDto) {
+        List<BookEntity> bookEntities = bookRepository.findAllByIdIn(authorDto.getBookIdList());
         AuthorEntity authorEntity = authorMapper.toEntity(authorDto);
+        authorEntity.setBooks(bookEntities);
         authorRepository.save(authorEntity);
-
     }
+
 
     public void removeAuthor(Long Id) {
         AuthorEntity authorEntity = authorRepository.findById(Id)
@@ -59,7 +64,7 @@ public class AuthorService {
         AuthorEntity authorEntity = authorRepository.findById(Id).orElseThrow(
                 () -> new NotFoundException(Error.AUTHOR_NOT_FOUND_ERROR_CODE,
                         Error.AUTHOR_NOT_FOUND_ERROR_MESSAGE));
-        return bookStoreMapper.toDto(authorEntity.getBookEntityList());
+        return bookStoreMapper.toDto(authorEntity.getBooks());
     }
 
 }

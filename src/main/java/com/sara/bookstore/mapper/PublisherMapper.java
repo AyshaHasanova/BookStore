@@ -5,5 +5,5 @@ import com.sara.bookstore.model.dto.PublisherDto;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface PublisherMapper extends EntityMapper<PublisherDto, PublisherEntity>{
+public interface  PublisherMapper extends EntityMapper<PublisherDto, PublisherEntity>{
 }

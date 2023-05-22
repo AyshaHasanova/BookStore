@@ -4,7 +4,6 @@ import com.sara.bookstore.dao.entity.ReviewEntity;
 import com.sara.bookstore.dao.repository.ReviewRepository;
 import com.sara.bookstore.exception.Error;
 import com.sara.bookstore.exception.NotFoundException;
-import com.sara.bookstore.mapper.BookStoreMapper;
 import com.sara.bookstore.mapper.ReviewMapper;
 import com.sara.bookstore.model.dto.ReviewDto;
 import lombok.AllArgsConstructor;

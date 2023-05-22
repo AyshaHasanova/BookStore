@@ -9,12 +9,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface BookRepository extends JpaRepository<BookEntity, Long> {
-    List<BookEntity> findByName(String name);
-
-    List<BookEntity> findByLanguage(Language language);
-
-    List<BookEntity> findByPublicationDate(LocalDate publicationDate);
+//    List<BookEntity> findByName(String name);
+//
+//    List<BookEntity> findByLanguage(Language language);
+//
+//    List<BookEntity> findByPublicationDate(LocalDate publicationDate);
 
     List<BookEntity> findAll(Specification<BookEntity> specification);
+    List<BookEntity> findAllByIdIn(List<Long> idList);
 }
 

@@ -6,10 +6,10 @@ import com.sara.bookstore.dao.repository.BookRepository;
 import com.sara.bookstore.dao.repository.PublicationRepository;
 import com.sara.bookstore.exception.NotEnoughStockException;
 import com.sara.bookstore.exception.NotFoundException;
+import com.sara.bookstore.model.dto.BookDto;
 import com.sara.bookstore.specification.BookSpecification;
 import com.sara.bookstore.model.dto.BookFilter;
 import com.sara.bookstore.mapper.BookStoreMapper;
-import com.sara.bookstore.model.dto.BookDto;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
-    private final BookStoreMapper bookStoreMapper;
+    private final BookStoreMapper    bookStoreMapper;
     private final AuthorRepository authorRepository;
     private final PublicationRepository publisherRepository;
 
@@ -88,6 +88,7 @@ public class BookService {
 
     public List<BookDto> findBooks(BookFilter filter) {
         Specification<BookEntity> specification = new BookSpecification(filter);
+        System.out.println("Service");
         List<BookEntity> bookEntities = bookRepository.findAll(specification);
         return bookStoreMapper.toDto(bookEntities);
     }
